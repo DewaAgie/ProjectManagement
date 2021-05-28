@@ -138,4 +138,46 @@ class Tim extends Model
 
       return $data;
     }
+
+    public function selectTimByRequest($id){
+      $select = [
+        'tr_tim.idTeam as idTeam',
+        'tr_tim.idUser as idUser',
+        'tr_tim.idProject as idProject',
+        'ms_project.namaProject as namaProject',
+        'users.name as namaUser'
+      ];
+
+      $data = DB::table('tr_tim')
+        ->join('ms_project', 'tr_tim.idProject', '=', 'ms_project.idProject')
+        ->join('users', 'tr_tim.idUser', '=', 'users.id')
+        ->select($select)
+        ->where('tr_tim.deleted', 0);
+      if ($id != '' && $id != NULL && $id) {
+        $data = $data->where('ms_project.idProject', '=', $id);
+      }
+      $data = $data->get();
+
+      return $data;
+    }
+
+    public function selectTimByProject($idProject){
+      $select = [
+        'tr_tim.idTeam as idTeam',
+        'tr_tim.idUser as idUser',
+        'tr_tim.idProject as idProject',
+        'ms_project.namaProject as namaProject',
+        'users.name as namaUser'
+      ];
+      
+      $data = DB::table('tr_tim')
+        ->join('users', 'tr_tim.idUser', '=', 'users.id')
+        ->join('ms_project', 'tr_tim.idProject', '=', 'ms_project.idProject')
+        ->select($select)
+        ->where('tr_tim.deleted', 0)
+        ->where('tr_tim.idProject', $idProject)
+        ->get();
+
+      return $data;
+    }
 }

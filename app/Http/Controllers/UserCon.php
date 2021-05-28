@@ -16,7 +16,7 @@ class UserCon extends Controller
     public function showForm(Request $req){
       $obj  = new User;
       $id   = $req->id;
-      if (Auth::User()->role != "Admin") {
+      if (Auth::User()->role != "Admin" && Auth::user()->id != $id) {
           return redirect("/");
       }
 
@@ -56,5 +56,14 @@ class UserCon extends Controller
       $result = $obj->deleteUser($id);
 
       return $agix->jsonEncode($result);
+    }
+
+    public function setThemeUser(Request $req){
+      $obj = new User;
+      $dark = $req->dark;
+      $idUser = Auth::user()->id;
+      $result = $obj->setThemeUser($dark, $idUser);
+
+      return $result;
     }
 }

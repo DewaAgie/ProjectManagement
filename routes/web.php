@@ -35,16 +35,20 @@ Route::group(['middleware' => ['web', 'auth', 'role']],  function(){
   Route::post('/users/processForm', 'UserCon@processForm');
   Route::get('/users/jsonListUser', 'UserCon@jsonListUser');
   Route::get('/user/deleteUser', 'UserCon@deleteUser');
+  Route::get('/users/setThemeUser', 'UserCon@setThemeUser');
 
   // Tim
   Route::get('/tim/jsonListTim', 'TimCon@jsonListTim');
   Route::post('/tim/processForm', 'TimCon@processForm');
   Route::get('/tim/jsonDetailTim', 'TimCon@jsonDetailTim');
   Route::get('/tim/deleteTim', 'TimCon@deleteTim');
+  Route::get('/tim/selectTimByProject', 'TimCon@selectTimByProject');
 
   // Request
   Route::get('/request', 'RequestCon@index');
   Route::get('request/add', 'RequestCon@addRequest');
   Route::post('/request/processForm', 'RequestCon@processForm');
   Route::get('/request/jsonListRequest', 'RequestCon@jsonListRequest');
+  Route::get('/request/loadRequestUser', 'RequestCon@loadRequestUser');
+  Route::get('/request/deleteRequest', 'RequestCon@deleteRequest');
 });

@@ -124,7 +124,7 @@ function pageIndex(index) {
   loadList();
 }
 
-function cariProject() {
+function cariRequest() {
   pageAktif = 0;
   pageCount = 0;
   loadList();
@@ -138,10 +138,10 @@ function pageShow(index) {
 
 
 function loadList() {
-  $('.tableProject').loading('toggle');
+  $('.tableRequest').loading('toggle');
   var txt = "";
   let status = {
-      0: 'Project Baru',
+      0: 'Request Baru',
       1: 'Proses Pengembangan',
       2: 'Selesai Dikembangkan',
       3: 'Cancel',
@@ -150,18 +150,22 @@ function loadList() {
   var no = (parseInt(page) * 20) + 1;
   var awal = no;
   var cari = $('#cariRequest').val();
-  $.getJSON(link + '/request/jsonListRequest?page=' + page + "&search=" + cari, function (data) {
+  let filterStatus = $("#statusRequest").val();
+  $.getJSON(link + '/request/jsonListRequest?page=' + page + "&search=" + cari + "&status="+filterStatus, function (data) {
       jumlahSeluruh = data[0];
       pageTotal = parseInt(Math.ceil(jumlahSeluruh / 20));
       $.each(data[1], function (key, val) {
           txt += `<tr>`;
           txt += `<td align="left">${no}</td>
-          <td align="left"><a href="#!" onclick="showFormRequest(${val.idRequest})">${val.namaRequest}</a></td>
+          <td align="left"><a href="${link}/request/add?id=${val.idRequest}">${val.judulRequest}</a></td>
           <td align="left">${status[val.status]}</td>`;
+          if (data[2] == 'Admin') {
+            txt += `<td align="left">${val.namaUser == null || val.namaUser == '' || val.namaUser == 'null' ? '-' : val.namaUser}</td>`;
+          }
           if (roleUser == 'Admin') {
               txt += `
                   <td align="left">
-                  <a href="#!" onclick="showFormRequest(${val.idRequest})" class="text-primary" data-placement="top" data-toggle="tooltip" title="Edit">
+                  <a href="${link}/request/add?id=${val.idRequest}"class="text-primary" data-placement="top" data-toggle="tooltip" title="Edit">
                   <i class="ti-marker-alt"></i>
                   </a>
                   <a href="#!" onclick="deleteRequest(${val.idRequest})" class="text-danger" data-placement="top" title="Delete" data-toggle="tooltip">
@@ -208,7 +212,7 @@ function deleteRequest(id) {
               }
           });
           $.getJSON(link + "/request/deleteRequest?id=" + id, function (data) {
-              if (data == 1) {
+              if (data.error) {
                   Swal.fire(
                       data.message,
                       '',

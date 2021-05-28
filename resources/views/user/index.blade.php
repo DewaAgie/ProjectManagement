@@ -82,6 +82,8 @@ Request App | User
                         <tr>
                           <th>No</th>
                           <th>Nama User</th>
+                          <th>Email</th>
+                          <th>No Telp</th>
                           <th>Role</th>
                           {{-- <th>Bonus</th> --}}
                           @if(Auth::user()->role == "Admin")

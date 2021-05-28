@@ -24,7 +24,7 @@
         $('.user_telepon').html(data.noTelp);
         $('.user_detail_href').attr('href',link+"/users/form?id="+data.id);
         $('.user_sgm_code').html(data.salesCode);
-        loadPendapatan();
+        loadRequest();
         $('.fancybox').fancybox();
       });
 
@@ -58,8 +58,6 @@
           $(".rekapCRO").html(html)
       })
     }
-
-    loadRekapCro()
 
     function loadHTMLRekapAdmin(data, type) {
       let html = "";
@@ -199,7 +197,7 @@
         $(this).blur();
         $(this).datepicker('hide');
         setDateValue(ev.date);
-        loadPendapatan();
+        loadRequest();
         cariStaff();
         loadRekapCro(changeFormatDateToMonth($("#periode-rekap-kirim").val()), $("#status-rekap-kirim").val())
     });
@@ -237,32 +235,34 @@
       return year+'-'+month;      
     }
 
-    function loadPendapatan(){
+    function loadRequest(){
       var id = $('.listStaff').val();
       var periode = $("#timepicker2").val();
-      var pendapatan_tim = parseInt($("#pendapatan-tim").val());
-      $.getJSON(link+"/users/jsonLoadPendapatan?id="+id+"&periode="+periode+"&tim="+pendapatan_tim, function(data){
-        $(".dasboard-bonus").hide();
-        $('.dashboard-atas').each(function(){
-          $(this).removeClass("col-md-4");
-          $(this).removeClass("col-md-3");
-        });
-        if (pendapatan_tim == 0) {
-          $(".dasboard-bonus").show();
-          $('.dashboard-atas').each(function(){
-            $(this).addClass("col-md-3");
-          });
-        }else{
-          $('.dashboard-atas').each(function(){
-            $(this).addClass("col-md-4");
-          });
-        }
-
-        $(".d-so").html(data.so);
-        $(".d-wo").html(data.wo);
-        $(".d-sa").html(data.sa);
+      $.getJSON(link+"/request/loadRequestUser?id="+id+"&periode="+periode, function(data){
+        $(".requestBaru").html(data.requestBaru);
+        $(".sedangDikerjakan").html(data.sedangDikerjakan);
+        $(".requestTerselesaikan").html(data.requestTerselesaikan);
         $(".d-bonus").html(data.bonus);
+
+        updateListRequest(data.data);
       });
+    }
+
+    function updateListRequest(data){
+      let text = ``;
+      $.each(data, (key, value) => {
+        text+= `
+          <li>
+            <a href="${link}/request/add?id=${value.idRequest}">
+              <p>
+                <span>${value.judulRequest}</span>
+              </p>
+            </a>
+          </li>
+        `;
+      })
+
+      $('#requestSedangDikerjakan').html(text);
     }
 
 
@@ -275,8 +275,8 @@ var indexContent = 0;
 var orderedBY  = "";
 
 $(document).ready(function(){
-    loadListStaff();
-    loadPendapatan();
+    // loadListStaff();
+    loadRequest();
 });
 
 function setPaging(show,between){

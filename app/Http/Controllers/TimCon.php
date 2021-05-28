@@ -72,4 +72,22 @@ class TimCon extends Controller
 
       return $agix->jsonEncode($result);
     }
+
+    public function selectTimByProject(Request $req){
+      $idProject = $req->id;
+      $obj    = new Tim;
+      $agix   = new AgixFunc;
+
+      $result = $obj->selectTimByProject($idProject);
+
+      return $agix->jsonEncode($result);
+    }
+
+    public function getToken(){
+      return csrf_token(); 
+    }
+
+    public function testPostman(){
+      dd('mashook');
+    }
 }

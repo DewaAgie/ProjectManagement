@@ -55,7 +55,8 @@ class Project extends Model
     }
 
     public function getJsonListProject($seluruh, $page, $search){
-      $data = DB::table('ms_project');
+      $data = DB::table('ms_project')
+        ->where('deleted', 0);
       if($search != '' && $search != NULL){
         $data = $data->where(function($query) use ($search){
           $query = $query->where('namaProject', 'LIKE', '%'.$search.'%');

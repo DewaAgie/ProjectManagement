@@ -3,6 +3,15 @@ $("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
 //
 $('#formRequest').submit(function (e) {
     e.preventDefault();
+    let project = $("#project").val();
+    if(project == 'all'){
+      Swal.fire(
+          'Simpah Request Gagal',
+          'Harap pilih project terlebih dahulu',
+          'error'
+      );
+      return false;
+    }
     Swal.fire({
         title: 'Apa anda Yakin?',
         text: "",
@@ -31,7 +40,7 @@ $('#formRequest').submit(function (e) {
                 success: function (data) {
                     Swal.fire(
                         'Proses berhasil',
-                        '',
+                        data.message,
                         'success'
                     )
                 },
@@ -82,3 +91,26 @@ function changeFormatDateToDate(date){
   var year = date.getFullYear();
   return year+'-'+month;
 }
+
+$("#project").on('change', function(){
+  let idProject = $(this).val();
+  $.ajax({
+      url: `${link}/tim/selectTimByProject?id=${idProject}`,
+      type: 'GET',
+      dataType: "JSON",
+      success: function (data) {
+        let text = `<option value="all">Pilih Team</option>`;
+        $.each(data, (key, val) => {
+          text += `<option value="${val.idTeam}">${val.namaUser}</option>`;
+        })
+        $("#tim").html(text);
+      },
+      error: function (xhr, textStatus, error) {
+
+      },
+      cache: false,
+      contentType: false,
+      processData: false,
+      dataType: "json",
+  })
+})

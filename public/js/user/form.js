@@ -49,7 +49,6 @@ $('#formStaff').submit(function (e) {
             });
             var formData = new FormData(this);
             $('#formStaff .inputFoto').each(function () {
-                console.log(gambarUploaded[$(this).attr('name')]);
                 if (typeof gambarUploaded[$(this).attr('name')] != 'undefined') {
                     formData.set($(this).attr('name'), gambarUploaded[$(this).attr('name')]);
                 }

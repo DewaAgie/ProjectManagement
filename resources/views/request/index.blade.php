@@ -49,7 +49,20 @@ Request App | Request
             </div>
             <div class="col-md-12 tableRequest">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
+                  <div class="input-group">
+                    <select name="statusRequest" id="statusRequest" class="form-control form-control-sm">
+                      <option value="all">All</option>
+                      <option value="0">Request Baru</option>
+                      <option value="1">Request Sedang Dikerjakan</option>
+                      <option value="2">Testing</option>
+                      <option value="3">Revisi</option>
+                      <option value="4">Terselesaikan</option>
+                      <option value="5">Publish</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
                   <div class="input-group">
                     <input type="text" class="form-control form-control-sm" placeholder="Cari Request..." id="cariRequest">
                     <div class="input-group-append">
@@ -57,7 +70,7 @@ Request App | Request
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                    <div class="mailbox-controls">
                       <div class="float-right">                    
                       <span id="displayPage">0-0/0</span>
@@ -75,6 +88,9 @@ Request App | Request
                           <th>No</th>
                           <th>Nama Request</th>
                           <th>Status</th>
+                          @if (Auth::user()->role == 'Admin')
+                            <th>Programmer</th>  
+                          @endif
                           {{-- <th>Bonus</th> --}}
                           @if(Auth::user()->role == "Admin")
                           <th>Actions</th>
@@ -107,5 +123,5 @@ Request App | Request
 </div>
 @endsection
 @section("javascript")
-<script src="{{url('js/request/request.js')}}"></script>
+<script src="{{url('js/request/request.js?v='.time())}}"></script>
 @endsection

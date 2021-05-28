@@ -152,6 +152,8 @@ function loadList() {
           txt += `<tr>`;
           txt += `<td align="left">${no}</td>
           <td align="left"><a href="${link+"/users/form?id="+val.id}">${val.name}</a></td>
+          <td align="left">${val.email}</td>
+          <td align="left">${val.noTelp != null && val.noTelp != 'null' && val.noTelp != '' ? val.noTelp : '-'}</td>
           <td align="left">${val.role}</td>`;
           if (roleUser == 'Admin') {
               txt += `

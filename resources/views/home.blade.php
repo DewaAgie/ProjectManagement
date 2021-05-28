@@ -65,7 +65,7 @@ Request Apps | Dashboard
                       </div>
                       <div class="row">
                           <div class="col-12 align-self-center">
-                              <h2 class="font-light text-white d-so">
+                              <h2 class="font-light text-white requestBaru">
                                 
                               </h2>
                           </div>
@@ -91,7 +91,7 @@ Request Apps | Dashboard
                       </div>
                       <div class="row">
                           <div class="col-12 align-self-center">
-                              <h2 class="font-light text-white d-wo">
+                              <h2 class="font-light text-white sedangDikerjakan">
                                 
                               </h2>
                           </div>
@@ -117,7 +117,7 @@ Request Apps | Dashboard
                       </div>
                       <div class="row">
                           <div class="col-12 align-self-center">
-                              <h2 class="font-light text-white d-sa">
+                              <h2 class="font-light text-white requestTerselesaikan">
                                 
                               </h2>
                           </div>
@@ -178,7 +178,7 @@ Request Apps | Dashboard
                       
                       {{-- <a href="{{url('/users/form?id='.Auth::User()->id)}}" class="m-t-10 waves-effect waves-dark btn btn-info btn-rounded user_detail_href">View Profile</a> --}}
                       @if(Auth::User()->role == "Admin")
-                        <a href="{{url('/request/form')}}" class="m-t-10 waves-effect waves-dark btn btn-sm btn-success btn-rounded user_detail_href"><i class="fa fa-plus"></i> Tambah Request</a>
+                        <a href="{{url('/request/add')}}" class="m-t-10 waves-effect waves-dark btn btn-sm btn-success btn-rounded user_detail_href"><i class="fa fa-plus"></i> Tambah Request</a>
                       @endif
                   </div>
               </div>
@@ -192,25 +192,7 @@ Request Apps | Dashboard
                     </h5>
                     <hr>
                     <div class="amp-pxl m-t-5" style="height: 254px;overflow-y: auto;">
-                      <ul>
-                        <li>
-                          <a href="#">
-                            <p>
-                              <span>test</span>
-                              <span>test</span>
-                              <span>test</span>
-                            </p>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            <p>
-                              <span>test</span>
-                              <span>test</span>
-                              <span>test</span>
-                            </p>
-                          </a>
-                        </li>
+                      <ul id="requestSedangDikerjakan">
                         <li>
                           <a href="#">
                             <p>
@@ -230,7 +212,7 @@ Request Apps | Dashboard
 
 @section("javascript")
 <script src="{{url('/template/assets/plugins/Chart.js/Chart.min.js')}}"></script>
-<script src="{{url('/js/dashboard/index.js?v=1')}}"></script>
+<script src="{{url('/js/dashboard/index.js?v='.time())}}"></script>
 @endsection
 </div>
 @endsection

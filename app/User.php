@@ -163,4 +163,24 @@ class User extends Authenticatable
         ->get();
       return $result;
     }
+
+    public function setThemeUser($dark, $idUser){
+      $process = DB::table('users')
+        ->where('id', $idUser)
+        ->update(['dark_mode' => $dark]);
+
+      if($process){
+        $message  = 'Update Theme Berhasil';
+        $error    = false;
+      } else{
+        $message  = 'Update Theme Gagal';
+        $error    = true;
+      }
+
+      $result = [
+        'message' => $message,
+        'error'   => $error
+      ];
+      return $result;
+    }
 }

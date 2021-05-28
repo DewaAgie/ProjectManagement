@@ -116,7 +116,7 @@
                         <!-- ============================================================== -->
                         <!-- Comment -->
                         <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown" style="display:none;">
                             <a class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-bell"></i>
                               <div class="notify notifAll" style="display: none;"> 
                                 <span class="heartbit"></span> <span class="point"></span> 
@@ -129,19 +129,6 @@
                                 </li>
                                 <li>
                                   <div class="message-center">
-                                     <!-- Message -->
-                                    {{-- <a href="{{url('/pelanggan?list=0')}}">
-                                        <div class="btn btn-info btn-circle"><i class="fa fa-map-marker"></i></div>
-                                        <div class="mail-contnet" style="padding-left:10px;">
-                                            <h6>
-                                                <span class="span_notif">0</span> Cek Site ID
-                                            </h6>
-                                         </div>
-                                         <div class="notify notifApp"> 
-                                          <span class="heartbit"></span> <span class="point"></span> 
-                                        </div>  
-                                    </a> --}}
-                                    <!-- Message -->
                                     <!-- Message -->
                                     <a href="{{url('/pelanggan?list=2')}}">
                                         <div class="btn btn-success btn-circle"><i class="ti-calendar"></i></div>

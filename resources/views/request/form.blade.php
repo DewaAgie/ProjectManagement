@@ -7,6 +7,9 @@ Request App | Request
  .select2-container--default .select2-selection--multiple {      
     padding: 0px 10px;
 }
+.inputDisable{
+  background-color: white !important;
+}
 </style>
 <!-- ============================================================== -->
 <!-- Bread crumb and right sidebar toggle -->
@@ -36,7 +39,7 @@ Request App | Request
           <h4 class="m-b-0">Form Request</h4></div>
         <div class="card-body">
           <form action="{{url('/request/processForm')}}" id="formRequest" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="{{isset($data->idRequest)?$data->idRequest:''}}">
+            <input type="hidden" name="idRequest" value="{{isset($data->idRequest)?$data->idRequest:''}}">
             @csrf
             <div class="row">                
               <div class="col-md-12">
@@ -45,10 +48,24 @@ Request App | Request
                   <input type="text" name="judulRequest" class="form-control form-control-sm" placeholder="Masukkan nama..." value="{{isset($data->judulRequest)?$data->judulRequest:''}}" required {{Auth::user()->role != "Programmer" ? '' :'disabled'}}>
                 </div>
               </div>
+              @if (Auth::user()->role != "User")
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>User Request</label>
+                    <input type="text" name="userRequest" class="form-control form-control-sm" placeholder="Masukkan nama..." value="{{isset($data->namaUser)?$data->namaUser:''}}" required disabled>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Tgl Request</label>
+                    <input type="text" name="tglRequest" class="form-control form-control-sm" placeholder="Tanggal Request" value="{{isset($data->tglRequest)?$data->tglRequest:''}}" disabled>
+                  </div>
+                </div>
+              @endif
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Deskripsi</label>
-                  <textarea id="konten" class="form-control" name="deskripsi" rows="20" cols="50">{{ isset($data->id)?$data->deskripsi:''}}</textarea>
+                  <textarea id="konten" class="form-control" name="deskripsi" rows="20" cols="50">{{ isset($data->deskripsi)?$data->deskripsi:''}}</textarea>
                 </div>
               </div>
               <div class="col-md-6">
@@ -81,10 +98,10 @@ Request App | Request
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Penjadwalan</label>
-                    <input type="text" class="form-control" id="penjadwalan" value="{{isset($data->tglPenjadwalan) ? date('M Y', strtotime($data->tglPenjadwalan)) : date('M Y')}}" readonly>
+                    <input type="text" class="form-control inputDisable" id="penjadwalan" value="{{isset($data->tglPenjadwalan) ? date('M Y', strtotime($data->tglPenjadwalan)) : date('M Y')}}" readonly>
                   </div>
                 </div>
-                <input type="text" name="tglPenjadwalan" id="tampungPenjadwalan" value="{{isset($data->tglPenjadwalan)?$data->tglPenjadwalan:''}}">
+                <input type="hidden" name="tglPenjadwalan" id="tampungPenjadwalan" value="{{isset($data->tglPenjadwalan)?$data->tglPenjadwalan:date('Y-m-d')}}">
               @else
                 <input type="hidden" name="penjadwalan" value="{{isset($data->tglPenjadwalan)?$data->tglPenjadwalan:''}}">
               @endif
@@ -113,11 +130,9 @@ Request App | Request
               </div>
               <div class="col-md-12">
                 <div class="float-right">
-                  @if(Auth::User()->role != "Programmer")
                   <div class="btn-group">
                     <button type="submit" class="btn btn-success">Simpan</button>
                   </div>
-                  @endif
                   <div class="btn-group">
                     @if(Auth::User()->role != "Programmer")
                       <a href="{{url('/request')}}" class="btn btn-danger">Batal</a>

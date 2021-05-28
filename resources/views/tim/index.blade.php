@@ -174,5 +174,5 @@ Request App | TIM
 </div>
 @endsection
 @section("javascript")
-<script src="{{url('js/tim/tim.js')}}"></script>
+<script src="{{url('js/tim/tim.js?v=1')}}"></script>
 @endsection
