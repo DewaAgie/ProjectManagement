@@ -88,4 +88,19 @@ class RequestCon extends Controller
 
       return $agix->jsonEncode($result);
     }
+
+    public function download(){
+      $obj = new Requests;
+      $agix = new AgixFunc;
+      $param = [
+        'page'    => 1,
+        'search'  => '',
+        'status'  => 'all'
+      ];
+
+      $result = $obj->jsonListRequest(1, $param);
+
+      return view('request.rekap')
+        ->with('data', $result);
+    }
 }

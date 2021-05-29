@@ -83,11 +83,7 @@ class TimCon extends Controller
       return $agix->jsonEncode($result);
     }
 
-    public function getToken(){
-      return csrf_token(); 
-    }
-
-    public function testPostman(){
-      dd('mashook');
+    public function getCurl(){
+      return view('welcome');
     }
 }

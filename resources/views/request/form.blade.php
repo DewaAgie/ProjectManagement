@@ -45,10 +45,10 @@ Request App | Request
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Judul Request</label>
-                  <input type="text" name="judulRequest" class="form-control form-control-sm" placeholder="Masukkan nama..." value="{{isset($data->judulRequest)?$data->judulRequest:''}}" required {{Auth::user()->role != "Programmer" ? '' :'disabled'}}>
+                  <input type="text" name="judulRequest" class="form-control form-control-sm" placeholder="Masukkan Judul request..." value="{{isset($data->judulRequest)?$data->judulRequest:''}}" required {{Auth::user()->role != "Programmer" ? '' :'disabled'}}>
                 </div>
               </div>
-              @if (Auth::user()->role != "User")
+              @if (Auth::user()->role != "User" && isset($data))
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>User Request</label>

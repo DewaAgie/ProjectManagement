@@ -193,7 +193,8 @@ class Requests extends Model
     public function selectRequestBaru($id, $periode){
       $result = DB::table('tr_request')
         ->leftJoin('tr_tim', 'tr_request.idTim', '=', 'tr_tim.idTeam')
-        ->where('tglRequest', 'LIKE', '%'.$periode.'%');
+        ->where('tglRequest', 'LIKE', '%'.$periode.'%')
+        ->where('tr_request.deleted', 0);
 
       if(Auth::user()->role == 'Programmer'){
         $result = $result->where('tr_tim.idUser', $id);

@@ -35,7 +35,16 @@ Request App | Request
           <h4 class="card-title m-b-0">List Request</h4></div>
         <div class="card-body collapse show">
           <div class="row">              
-            <div class="col-12">
+            <div class="col-6">
+              <div class="btn-group">
+                @if(Auth::user()->role == "Admin")
+                <a href="{{url('/request/download')}}" class="btn btn-sm btn-info btn-modal-request">
+                  <i class="fa fa-file"></i> Download
+                </a>
+                @endif
+              </div>
+            </div>
+            <div class="col-6">
               <div class="btn-group float-right">
                 @if(Auth::user()->role != "Programmer")
                 <a href="{{url('/request/add')}}" class="btn btn-sm btn-info btn-modal-request">
