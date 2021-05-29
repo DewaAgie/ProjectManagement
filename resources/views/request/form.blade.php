@@ -128,6 +128,30 @@ Request App | Request
               <div class="col-md-12">
                 <hr>
               </div>
+              <div class="col-12 form-group">
+                <div class="btn-group float-right">
+                  @if(Auth::user()->role != "User")
+                  <a href="#" class="btn btn-sm btn-info btn-modal-request">
+                    <i class="fa fa-plus"></i> Tambah Revisi
+                  </a>
+                  @endif
+                </div>
+              </div>
+              <div class="col-12 form-group">
+                <label for="">Revisi 1</label>
+                <div class="row">
+                  <div class="col-md-1">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="defaultCheck1" name="checkRevisi">
+                      <label class="form-check-label" for="defaultCheck1">
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-11">
+                    <input type="text" class="form-control" id="revisi" value="" name="keteranganRevisi">
+                  </div>
+                </div>
+              </div>
               <div class="col-md-12">
                 <div class="float-right">
                   <div class="btn-group">
