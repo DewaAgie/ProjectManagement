@@ -32,22 +32,6 @@ Request Apps | Dashboard
       
     <div class="col-md-12">
       <div class="row">
-        @if(Auth::User()->leader == 1)
-        <div class="col-md-12">
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-material" style="margin-bottom: 5px;">
-                <select class="form-control" onchange="loadPendapatan()" id="pendapatan-tim">
-                  <option value="0">Pendapatanku</option>
-                  <option value="1">Pendapatan Tim</option>
-                </select>
-              </div>
-            </div>              
-          </div>
-        </div>
-        @else
-        <input type="hidden" id="pendapatan-tim" value="{{ Auth::user()->role === 'CRO' ? 0 : 1 }}">
-        @endif
         <div class="dashboard-atas col-md-4">
               <!-- card -->
               <div class="card card-inverse card-primary">
@@ -126,31 +110,6 @@ Request Apps | Dashboard
               </div>
               <!-- card -->
           </div>
-
-          <div class="dashboard-atas dasboard-bonus col-md-4" style="display: none;">
-            <div class="card card-inverse card-info">
-              <div class="card-body">
-                  <div class="d-flex">
-                      <div class="m-r-20 align-self-center">
-                          <h1 class="text-white"><i class="ti-pie-chart"></i></h1></div>
-                      <div>
-                          <h4 class="card-title">Bonus</h4>
-                          <div class="card-subtitle form-material">
-                            <input type="text" class="form-control" id="min-date4" style="background-color: #0000ff00;color: white;" value="{{date('M Y')}}" readonly>
-                          </div> 
-                          <input type="hidden" id="timepicker4" value="{{date('Y-m')}}">
-                      </div>
-                  </div>
-                  <div class="row">
-                      <div class="col-12 align-self-center">
-                          <h2 class="font-light text-white d-bonus">
-                            
-                          </h2>
-                      </div>
-                  </div>
-              </div>
-            </div>
-          </div>
           <!-- card -->
           
           <div class="col-md-4" >
@@ -196,9 +155,7 @@ Request Apps | Dashboard
                         <li>
                           <a href="#">
                             <p>
-                              <span>test</span>
-                              <span>test</span>
-                              <span>test</span>
+                              <span>Data Tidak Ditemukan</span>
                             </p>
                           </a>
                         </li>

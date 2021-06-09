@@ -114,3 +114,50 @@ $("#project").on('change', function(){
       dataType: "json",
   })
 })
+function setCheckedRevisi(no){
+
+}
+
+function deleteRevisi(obj){
+  $('.deleteRevisi').on('click', function(){
+    let urutan = $(this).data('urutan');
+    Swal.fire({
+      title: 'Hapus Revisi!',
+      text: "Yakin ingin menghapus revisi?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Delete!'
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          'Terhapus!',
+          'Revisi Berhasil Dihapus.',
+          'success'
+        )
+        $("#revisi"+urutan).remove();
+      }
+    })
+  })
+}
+
+function setRevisiName(){
+  let revisi = $('.revisi');
+  for (let index = 0; index < revisi.length; index++) {
+    let text = $(revisi[index]).find('.textRevisi');
+  }
+}
+
+function checkRevisi(){
+  $(".btnCheckRevisi").on('change', function(){
+    let status = '';
+    if(this.checked){
+      status = 'on';
+    } else{
+      status = 'off';
+    }
+    let input = $(this).parent().find('.tampungStatusChecked')[0];
+    $(input).val(status);
+  });
+}

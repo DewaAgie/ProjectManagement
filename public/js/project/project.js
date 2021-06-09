@@ -71,14 +71,14 @@ $('#form_project').on("submit", function (e) {
                     }
                 },
                 error: function (xhr, textStatus, error) {
-                    var w = window.open();
-                    var html = xhr.responseText;
-                    $(w.document.body).html(html);
-                    // Swal.fire(
-                    //     'Proses gagal',
-                    //     '',
-                    //     'error'
-                    // );
+                    // var w = window.open();
+                    // var html = xhr.responseText;
+                    // $(w.document.body).html(html);
+                    Swal.fire(
+                        'Proses gagal',
+                        '',
+                        'error'
+                    );
                 },
                 cache: false,
                 contentType: false,

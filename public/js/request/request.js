@@ -143,8 +143,10 @@ function loadList() {
   let status = {
       0: 'Request Baru',
       1: 'Proses Pengembangan',
-      2: 'Selesai Dikembangkan',
-      3: 'Cancel',
+      2: 'Testing',
+      3: 'Revisi',
+      4: 'Selesai Dikembangkan',
+      5: 'Publish'
   };
   page = pageCount;
   var no = (parseInt(page) * 20) + 1;

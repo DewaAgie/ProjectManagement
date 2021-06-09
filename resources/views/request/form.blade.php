@@ -10,6 +10,9 @@ Request App | Request
 .inputDisable{
   background-color: white !important;
 }
+.deleteRevisi{
+  cursor: pointer;
+}
 </style>
 <!-- ============================================================== -->
 <!-- Bread crumb and right sidebar toggle -->
@@ -45,20 +48,20 @@ Request App | Request
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Judul Request</label>
-                  <input type="text" name="judulRequest" class="form-control form-control-sm" placeholder="Masukkan Judul request..." value="{{isset($data->judulRequest)?$data->judulRequest:''}}" required {{Auth::user()->role != "Programmer" ? '' :'disabled'}}>
+                  <input type="text" name="judulRequest" class="form-control form-control-sm" placeholder="Masukkan Judul request..." value="{{isset($data->judulRequest)?$data->judulRequest:''}}" required {{Auth::user()->role != "Programmer" ? '' :'readonly'}}>
                 </div>
               </div>
               @if (Auth::user()->role != "User" && isset($data))
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>User Request</label>
-                    <input type="text" name="userRequest" class="form-control form-control-sm" placeholder="Masukkan nama..." value="{{isset($data->namaUser)?$data->namaUser:''}}" required disabled>
+                    <input type="text" name="userRequest" class="form-control form-control-sm" placeholder="Masukkan nama..." value="{{isset($data->namaUser)?$data->namaUser:''}}" required readonly>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Tgl Request</label>
-                    <input type="text" name="tglRequest" class="form-control form-control-sm" placeholder="Tanggal Request" value="{{isset($data->tglRequest)?$data->tglRequest:''}}" disabled>
+                    <input type="text" name="tglRequest" class="form-control form-control-sm" placeholder="Tanggal Request" value="{{isset($data->tglRequest)?$data->tglRequest:''}}" readonly>
                   </div>
                 </div>
               @endif
@@ -71,7 +74,7 @@ Request App | Request
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Pilih Project</label>
-                  <select name="project" id="project" class="form-control form-control-sm" required {{Auth::user()->role != "Programmer" ? '' :'disabled'}}>
+                  <select name="project" id="project" class="form-control form-control-sm" required {{Auth::user()->role != "Programmer" ? '' :'readonly'}}>
                     <option value="all">Pilih Project</option>
                     @foreach ($project as $itemProject)
                       <option value="{{$itemProject->idProject}}" {{isset($data->idProject) ? ($data->idProject == $itemProject->idProject ? 'selected' : '') : ''}}>{{$itemProject->namaProject}}</option>  
@@ -85,7 +88,7 @@ Request App | Request
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Pilih TIM</label>
-                    <select name="tim" id="tim" class="form-control form-control-sm" required {{Auth::user()->role === "Admin" ? '' :'disabled'}}>
+                    <select name="tim" id="tim" class="form-control form-control-sm" required {{Auth::user()->role === "Admin" ? '' :'readonly'}}>
                       <option value="all">Pilih Team</option>
                       @foreach ($tim as $itemTim)
                         <option value="{{$itemTim->idTeam}}" {{isset($data->idTeam) ? ($data->idTeam == $itemTim->idTeam ? 'selected' : '') : ''}}>{{$itemTim->namaUser}}</option>
@@ -130,28 +133,43 @@ Request App | Request
               </div>
               <div class="col-12 form-group">
                 <div class="btn-group float-right">
-                  @if(Auth::user()->role != "User")
-                  <a href="#" class="btn btn-sm btn-info btn-modal-request">
+                  @if(Auth::user()->role == "Admin")
+                  <button type="button" class="btn btn-sm btn-info btn-modal-request" id="tambahRevisi">
                     <i class="fa fa-plus"></i> Tambah Revisi
-                  </a>
+                  </button>
                   @endif
                 </div>
               </div>
-              <div class="col-12 form-group">
-                <label for="">Revisi 1</label>
-                <div class="row">
-                  <div class="col-md-1">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="defaultCheck1" name="checkRevisi">
-                      <label class="form-check-label" for="defaultCheck1">
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-md-11">
-                    <input type="text" class="form-control" id="revisi" value="" name="keteranganRevisi">
-                  </div>
+
+              @if (Auth::user()->role != "User")
+              <div class="col-12 form-group" id="tampungSemuaRevisi">
+                @if (count($revisi))
+                    @foreach ($revisi as $key => $item)
+                      <div class="revisi" id="revisi{{$key}}">
+                        <label for="" id="textRevisi1" class="textRevisi">Revisi</label>
+                        <div class="row">
+                          <div class="col-md-1">
+                            <div class="form-check">
+                              <input class="form-check-input btnCheckRevisi" type="checkbox" id="defaultCheck{{$key}}" {{$item->status == 1 || $item->status == '1' ? 'checked' : ''}}>
+                              <label class="form-check-label" for="defaultCheck{{$key}}">
+                                <input type="hidden" name="checkRevisi[]" class="tampungStatusChecked" value="{{ $item->status == 1 || $item->status == '1' ? 'on' : 'off'}}">
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-10">
+                            <input type="text" class="form-control" id="inputRevisi{{$key}}" value="{{$item->revisi}}" name="keteranganRevisi[]">
+                          </div>
+                          @if (Auth::user()->role == "Admin")
+                            <div class="col-md-1">
+                              <i class="fa fa-trash deleteRevisi" aria-hidden="true" data-urutan="{{$key}}"></i>
+                            </div>
+                          @endif
+                        </div>
+                      </div>
+                    @endforeach
+                    @endif
                 </div>
-              </div>
+              @endif
               <div class="col-md-12">
                 <div class="float-right">
                   <div class="btn-group">
@@ -201,6 +219,52 @@ Request App | Request
         $(this).datepicker('hide');
         setDateValue(ev.date);
     });
+    $(".btnCheckRevisi").on('change', function(){
+      let status = '';
+      if(this.checked){
+        status = 'on';
+      } else{
+        status = 'off';
+      }
+      let input = $(this).parent().find('.tampungStatusChecked')[0];
+      $(input).val(status);
+      // console.log($(this).data('urutan'));
+    });
+
+    deleteRevisi();
+    checkRevisi();
+
+    $("#tambahRevisi").on('click', function(){
+      let lastRevisi = $(".revisi").length + 1;
+      let revisi = `
+      <div class="revisi" id="revisi${lastRevisi}">
+        <label for="" id="textRevisi2" class="textRevisi">Revisi</label>
+        <div class="row">
+          <div class="col-md-1">
+            <div class="form-check">
+              <input class="form-check-input btnCheckRevisi" type="checkbox" id="defaultCheck${lastRevisi}" data-urutan="${lastRevisi}">
+              <label class="form-check-label" for="defaultCheck${lastRevisi}">
+                <input type="hidden" name="checkRevisi[]" class="tampungStatusChecked" value="off">
+              </label>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <input type="text" class="form-control" id="inputRevisi${lastRevisi}" value="" name="keteranganRevisi[]">
+          </div>
+          <div class="col-md-1">
+            <i class="fa fa-trash deleteRevisi" aria-hidden="true" data-urutan="${lastRevisi}"></i>
+          </div>
+        </div>
+      </div>
+      `;
+      $("#tampungSemuaRevisi").append(revisi);
+      deleteRevisi();
+      checkRevisi();
+    })
+    // $("#defaultCheck1").on('change', function(){
+    //   console.log(this.checked);
+    //   console.log($(this).data('urutan'));
+    // })
   })
 </script>
 <script>hljs.initHighlightingOnLoad();</script>

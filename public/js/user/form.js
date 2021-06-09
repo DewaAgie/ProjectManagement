@@ -66,9 +66,9 @@ $('#formStaff').submit(function (e) {
                     )
                 },
                 error: function (xhr, textStatus, error) {
-                    var w = window.open();
-                    var html = xhr.responseText;
-                    $(w.document.body).html(html);
+                    // var w = window.open();
+                    // var html = xhr.responseText;
+                    // $(w.document.body).html(html);
                     Swal.fire(
                         'Proses gagal',
                         '',

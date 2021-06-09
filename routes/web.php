@@ -52,4 +52,8 @@ Route::group(['middleware' => ['web', 'auth', 'role']],  function(){
   Route::get('/request/loadRequestUser', 'RequestCon@loadRequestUser');
   Route::get('/request/deleteRequest', 'RequestCon@deleteRequest');
   Route::get('/request/download', 'RequestCon@download');
+
+
+  // reset password
+  Route::get('/password/formResetPassword', 'UserCon@resetPassword');
 });

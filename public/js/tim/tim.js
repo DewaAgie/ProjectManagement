@@ -3,28 +3,28 @@ $('.btn-modal-tim').click(function () {
 });
 
 function showFormTim(id = 0) {
-  if (id != 0) {
-    Swal.fire({
-      title: 'Loading data..',
-      html: '',
-      allowOutsideClick: false,
-      onOpen: () => {
-          swal.showLoading()
-      }
-    });
-    $.getJSON(link + "/tim/jsonDetailTim?id=" + id, function (data) {
-      Swal.close();
-      $('#id_tim').val(data.idTim);
-      $('#id_programmer').val(data.idUser);
-      $('#id_project').val(data.idProject);
-      $('.modal-tim').modal();
-    });
-  } else {
-    $('#id_tim').val();
-    $('#id_programmer').val();
-    $('#id_project').val();
-    $('.modal-tim').modal();
-  }
+    if (id != 0) {
+        Swal.fire({
+            title: 'Loading data..',
+            html: '',
+            allowOutsideClick: false,
+            onOpen: () => {
+                swal.showLoading()
+            }
+        });
+        $.getJSON(link + "/tim/jsonDetailTim?id=" + id, function (data) {
+            Swal.close();
+            $('#id_tim').val(data.idTim);
+            $('#id_programmer').val(data.idUser);
+            $('#id_project').val(data.idProject);
+            $('.modal-tim').modal();
+        });
+    } else {
+        $('#id_tim').val();
+        $('#id_programmer').val();
+        $('#id_project').val();
+        $('.modal-tim').modal();
+    }
 }
 
 $('#form_tim').on("submit", function (e) {
@@ -70,9 +70,9 @@ $('#form_tim').on("submit", function (e) {
                     }
                 },
                 error: function (xhr, textStatus, error) {
-                    var w = window.open();
-                    var html = xhr.responseText;
-                    $(w.document.body).html(html);
+                    // var w = window.open();
+                    // var html = xhr.responseText;
+                    // $(w.document.body).html(html);
                     Swal.fire(
                         'Proses gagal',
                         '',
@@ -241,11 +241,11 @@ function pageShow(index) {
 
 function loadList() {
     $('.tableTim').loading('toggle');
-    var txt     = "";
-    page        = pageCount;
-    var no      = (parseInt(page) * 20) + 1;
-    var awal    = no;
-    var cari    = $('#cariTim').val();
+    var txt = "";
+    page = pageCount;
+    var no = (parseInt(page) * 20) + 1;
+    var awal = no;
+    var cari = $('#cariTim').val();
     let project = $("#project").val();
     $.getJSON(link + '/tim/jsonListTim?page=' + page + "&search=" + cari + "&project=" + project, function (data) {
         jumlahSeluruh = data[0];
@@ -256,7 +256,7 @@ function loadList() {
             <td align="left"><a href="#!" onclick="showFormPaket(${val.idTeam})">${val.namaUser}</a></td>
             <td align="left">${val.namaProject}</td>`;
             if (roleUser == 'Admin') {
-              txt += `
+                txt += `
                 <td align="left">
                 <a href="#!" onclick="showFormTim(${val.idTeam})" class="text-primary" data-placement="top" data-toggle="tooltip" title="Edit">
                 <i class="ti-marker-alt"></i>
@@ -267,7 +267,7 @@ function loadList() {
               </td>
               `
             }
-            txt+= `</tr>`;
+            txt += `</tr>`;
             indexContent = no;
             no++;
         });

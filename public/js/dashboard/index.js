@@ -34,160 +34,6 @@
       return Object.keys(obj).reduce((sum,key)=>sum+parseFloat(obj[key]||0),0);
     }
     
-    function loadRekapCro(month="", type="so") {
-      let statusActive = $("#statusActive2").val();
-      $.get(link + `/getRekapHarian?month=${month}&type=${type}&status=${statusActive}`)
-      .done(data => {
-        data = JSON.parse(data)
-        if(data.error) {
-          Swal.fire("Terjadi kesalahan saat menampilkan rekap harian", "", "info")
-          return 
-        }
-        var
-         html=""
-        if(data.role === "admin") {
-
-           data = data.data;
-          
-           html += loadHTMLRekapAdmin(data, type);
-        } else {
-          data = data.data
-          html += loadHTMLRekap(data)
-        }
-          
-          $(".rekapCRO").html(html)
-      })
-    }
-
-    function loadHTMLRekapAdmin(data, type) {
-      let html = "";
-      var 
-        header_title = "",
-        totalRekapPerHari = {};
-
-      switch (type) {
-        case "so":
-          header_title = `SALES ORDER ${data.month.toUpperCase()}`
-          break;
-        case "wo":
-          header_title = `WORK ORDER ${data.month.toUpperCase()}`
-          break;
-        case "sa":
-          header_title = `SALES ACTIVE ${data.month.toUpperCase()}`
-          break;
-      
-        default:
-          break;
-      }
-
-      html += `
-              <table border="1" width="100%" class="table table-sm">
-                
-                <tr>
-                  <td rowspan="2" align="center" style="background:#44546B;color:white;vertical-align:middle!important">CRO</td>
-                  <td colspan="${data.total_day+1}}" align="center">${header_title}</td>
-                </tr>
-                <tr >
-        `
-
-        // Membuat header tanggal
-        for(let i=1;i<=data.total_day;i++) {
-          html += `<td align="center" valign="center" style="padding:10px; ${data.hari_minggu.includes(i) ? 'color:red;' : ''}">${i}</td>`
-        }
-
-        html += `
-        <td align="center">Total</td>
-        </tr>`
-
-        // Membuat rekapan per CRO
-        data.cro.forEach(value => {
-          html += `
-          <tr>
-            <td style="padding:10px">
-              ${value.name}
-            </td>`
-            Object.entries(value.data[type]).forEach(([key, so]) => {
-              html += `<td align="center">${(so==0?'-':so)}</td>`
-              totalRekapPerHari[key] = totalRekapPerHari[key] ? totalRekapPerHari[key] + so : so 
-            });
-
-            html += `
-              <td align="center">${sum(value.data[type])}</td>
-            </tr>
-            `
-
-        });
-
-        html += `
-        <tr>
-          <td align="center"></td>
-        `
-        
-        Object.entries(totalRekapPerHari).forEach(([key, val]) => {          
-          html += `<th><center>${(val==0?'-':val)}</center></th>`
-        })
-
-        html += `
-          <th><center>${sum(totalRekapPerHari)}</center></th>
-        `
-        html +=`
-                </tr>
-              </table>
-      `
-      return html; 
-    }
-
-
-    function loadHTMLRekap(data) {
-      var 
-        html = "",
-        header_title = data.month.toUpperCase(),
-        totalRekapPerHari = {}
-
-      html += `
-            <table border="1" width="100%" class="table" style="border: 2px solid #dddddd;">
-              
-              <tr>
-                <td rowspan="2" align="center" style="background:#44546B;color:white;vertical-align:middle!important">CRO</td>
-                <td colspan="${data.total_day+1}" align="center">${header_title}</td>
-              </tr>
-              <tr >
-        `
-
-        for(let i=1;i<=data.total_day;i++) {
-          html += `<td align="center" valign="center" style="padding:10px; ${data.hari_minggu.includes(i) ? 'color:red;' : ''}">${i}</td>`
-        }
-        html+= `<td align="center" valign="center">Total</td>`
-
-        Object.entries(data.cro).forEach(([key, val]) => {
-          var title = "Sales Active"
-          if(key === "so") {
-            title = "Sales Order"
-          } else if(key === "wo"){
-            title = "Work Order"
-          }
-
-          html += `<tr><td align="center" valign="center">${title}</td>`
-          
-          Object.entries(val).forEach(([key, value]) => {
-            html += `<td align="center" valign="center">${(value == 0?'-':value)}</td>`
-          })
-
-          html+= `<td valign="center" align="center">${sum(val)}</td>`
-          html += "</tr>"
-        })
-
-        
-        // html += `
-        //   <td align="center">${sum(totalRekapPerHari)}</td>
-        // `
-        html +=`
-                </tr>
-              </table>
-      `
-
-      return html
-    }
 
     $("#min-date, #min-date2, #min-date3, #min-date4, #periode-staff, #periode-rekap").datepicker( {
         format: "M yyyy",
@@ -357,13 +203,13 @@ function setPaging(show,between){
           // $('#buttonSearchnya').focus();
           pageCount = 0;
           pageAktif = 0;
-          loadListStaff();
+          loadRequest()
         }
     });
     function pageGanti(index){
       pageAktif = index;
       pageCount = index;
-      loadListStaff(index);
+      loadRequest(index)
     }
 
     function changePage(e){
@@ -375,7 +221,7 @@ function setPaging(show,between){
     if (pageCount != 0) {
       pageAktif--;
       pageCount = pageCount-1;
-      loadListStaff();
+      loadRequest()
     }
   }
 
@@ -383,85 +229,20 @@ function setPaging(show,between){
     if (indexContent != jumlahSeluruh) {
       pageAktif++;
       pageCount = pageCount+1;
-      loadListStaff();
+      loadRequest()
     }
   }
   function pageIndex(index){
       pageAktif = index;
       pageCount = index;
-      loadListStaff();
+      loadRequest()
     }
-  function cariStaff(){
-    pageAktif = 0;
-    pageCount = 0;
-    loadListStaff();
- }
 
   function pageShow(index){
     pageAktif = index;
     pageCount = index;
-    loadListStaff();
+    loadRequest()
   }
-
-// staff
-  function loadListStaff(){
-    $('.tableStaff').loading('toggle');
-    var txt ="";
-    page      = pageCount;
-    var no    = (parseInt(page)*20)+1;
-    var awal  = no;
-    var cari = $('#cariStaff').val();
-    var role = $('#roleStaff').val();
-    var periode = $('#periode-staff-kirim').val();
-    var active = $("#statusActive").val();
-    $.getJSON(link+'/users/jsonListStaff?page='+page+'&cari='+cari+'&role='+role+'&periode='+periode+`&order=${orderedBY}&statusActive=${active}`,function(data){
-      jumlahSeluruh = data[0];
-      pageTotal = parseInt(Math.ceil(jumlahSeluruh/20));
-      $.each(data[1], function(key, val){
-        txt += `<tr>
-                <td align="left">${no}</td>
-                <td align="left">${val.salesCode}</td>
-                <td align="left"><a href="${link+"/users/form?id="+val.id}" style="color:#1e88e5;">${val.name}</a></td>
-                <td align="left">${val.SO}</td>
-                <td align="left">${val.WO}</td>
-                <td align="left">${val.SA}</td>
-                <td align="left">${val.bonus}</td>
-                <td align="left"><a href="${link}/downloadRekapPendapatan?id=${val.id}&month=${periode}"><i class="fa fa-download text-primary cursor-pointer" ></i></td>
-              </tr>`;
-        indexContent = no;
-        no++;
-      });
-    }).done(function(){
-      $('#displayPage').html((awal)+'-'+indexContent+'/'+jumlahSeluruh);
-      $('#displayPage2').html((awal)+'-'+indexContent+'/'+jumlahSeluruh);
-      $('#tbodyListStaff').html(txt);
-      $('.tableStaff').loading('toggle');
-      // $('[data-toggle="tooltip"]').tooltip();
-      setPaging(5,2);
-      if (jumlahSeluruh == 0) {
-        $('#tbodyListStaff').html("<td colspan='7'><center>Data tidak ditemukan</center></td>");
-      }
-    });
-  }
-
-  function downloadExcel(type="cro"){
-    let 
-      periode = $('#periode-rekap-kirim').val(),
-      typeStep = $("#select-status-rekap-kirim").val()
-
-    if(type === "cro") {
-      let 
-        cari = $('#cariStaff').val(),
-        role = $('#roleStaff').val();
-        statusActive = $("#statusActive").val();
-  
-      window.location.href = link+'/users/downloadReport?cari='+cari+'&role='+role+'&periode='+periode+'&status='+statusActive;
-    } else {
-      let statusActive = $("#statusActive2").val();
-      window.location.href = link + `/report/rekap-harian?month=${periode}&type=${typeStep}&status=${statusActive}`;
-    }
-  }
-
 
   function orderBy(element) {
     var orderedBy = $(element).data("orderby") === "asc" ? "desc" : "asc";
@@ -475,6 +256,6 @@ function setPaging(show,between){
     $(element).data("orderby", orderedBy);
     pageAktif = 0;
     pageCount = 0;
-    loadListStaff();
+    loadRequest()
   }
 

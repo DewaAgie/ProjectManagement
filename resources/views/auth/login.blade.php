@@ -23,9 +23,9 @@
                     <input id="password" type="password" class="form-control" placeholder="Password" name="password" required autocomplete="current-password">
                     </div>
                     <div class="form-group d-md-flex">
-                                    <div class="w-100 text-md-right">
+                                    {{-- <div class="w-100 text-md-right">
                                         <a href="{{ route('password.request') }}">Forgot Password</a>
-                                    </div>
+                                    </div> --}}
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn form-control btn-primary rounded submit px-3">Login</button>

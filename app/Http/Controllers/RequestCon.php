@@ -7,6 +7,7 @@ use App\Requests;
 use App\AgixFunc;
 use App\Project;
 use App\Tim;
+use App\Revisi;
 use Auth;
 
 class RequestCon extends Controller
@@ -16,22 +17,26 @@ class RequestCon extends Controller
     }
 
     public function addRequest(Request $req){
-      $project  = new Project;
-      $tim      = new Tim;
-      $request  = new Requests;
-      $id       = $req->id;
+      $project    = new Project;
+      $tim        = new Tim;
+      $request    = new Requests;
+      $revisi     = new Revisi;
+      $id         = $req->id;
       $allProject = $project->selectAllProject();
-      $data     = $request->selectDetailRequest($id);
+      $data       = $request->selectDetailRequest($id);
+      $dataRevisi = $revisi->selectRevisi($id);
+
       $kdProject = '';
       if ($data != NULL) {
         $kdProject = $data->idProject;
       }
-      $allTim = $tim->selectTimByRequest($kdProject);
+      $allTim     = $tim->selectTimByRequest($kdProject);
       
       return view('request.form')
         ->with('project', $allProject)
         ->with('tim', $allTim)
-        ->with('data', $data);
+        ->with('data', $data)
+        ->with('revisi', $dataRevisi);
     }
 
     public function processForm(Request $req){

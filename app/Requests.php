@@ -5,11 +5,13 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use App\AgixFunc;
+use App\Revisi;
 use Auth;
 
 class Requests extends Model
 {
     public function updateRequest($req){
+      $revisi       = new Revisi;
       $id           = $req->idRequest;
       $arrUpdate    = [
         'idProject'     => $req->project,
@@ -25,6 +27,10 @@ class Requests extends Model
       if($req->tglPenjadwalan != '' && $req->tglPenjadwalan != NULL){
         $arrUpdate['tglPenjadwalan'] = $req->tglPenjadwalan;
       }
+
+      if($req->status == 4 || $req->status == '4'){
+        $arrUpdate['tglSelesai'] = date('Y-m-d');
+      }
       
       $process = DB::table('tr_request')
         ->where('idRequest', $id)
@@ -34,8 +40,12 @@ class Requests extends Model
         $message  = 'Update Data Berhasil';
         $error    = false;
       } else{
-        $message  = 'Update Data Gagal';
-        $error    = true;
+        $message  = 'Update Data Berhasil';
+        $error    = false;
+      }
+
+      if ($req->checkRevisi != NULL && $req->keteranganRevisi != NULL) {
+        $updateRevisi = $revisi->updateRevisi($id, $req->checkRevisi, $req->keteranganRevisi);
       }
       
       $result = [
@@ -47,9 +57,11 @@ class Requests extends Model
     }
 
     public function insertRequest($req){
-      $agix = new AgixFunc;
+      $agix         = new AgixFunc;
+      $revisi       = new Revisi;
+      $id           = $agix->nextCode('idRequest', 'tr_request');
       $arrInsert    = [
-        'idRequest'     => $agix->nextCode('idRequest', 'tr_request'),
+        'idRequest'     => $id,
         'idProject'     => $req->project,
         'judulRequest'  => $req->judulRequest,
         'deskripsi'     => $req->deskripsi,
@@ -60,6 +72,10 @@ class Requests extends Model
 
       $process = DB::table('tr_request')
         ->insert($arrInsert);
+
+      if ($req->checkRevisi != NULL && $req->keteranganRevisi != NULL) {
+        $updateRevisi = $revisi->updateRevisi($id, $req->checkRevisi, $req->keteranganRevisi);
+      }
 
       if($process){
         $message  = 'Insert Data Berhasil';
@@ -140,7 +156,8 @@ class Requests extends Model
         'tr_request.status as status',
         'tr_request.deskripsi as deskripsi',
         'tr_request.tglPenjadwalan as tglPenjadwalan',
-        DB::raw('DATE_FORMAT(tr_request.tglRequest, "%d/%m/%Y") as tglRequest'),
+        'tr_request.tglRequest as tglRequest',
+        DB::raw('DATE_FORMAT(tr_request.tglRequest, "%d/%m/%Y") as tglRequestFormat'),
       ];
       $data = DB::table('tr_request')
         ->leftJoin('users', 'tr_request.idUser', '=', 'users.id')
